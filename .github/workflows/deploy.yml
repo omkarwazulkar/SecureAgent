@@ -23,12 +23,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Build & Push Image To ACR
+      - name: Login To ACR
         run: |
-          az acr build \
-            --registry $ACR_NAME \
-            --image secureagent:${{ github.sha }} \
-            .
+          az acr login --name $ACR_NAME
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $ACR_NAME.azurecr.io/secureagent:${{ github.sha }} .
+
+      - name: Push Docker Image
+        run: |
+          docker push $ACR_NAME.azurecr.io/secureagent:${{ github.sha }}
 
       - name: Deploy To Container Apps
         run: |
