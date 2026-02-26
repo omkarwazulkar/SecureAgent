@@ -60,7 +60,7 @@ app.post("/agent/orchestrate", agentRateLimiter, async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+app.listen(Number(port), "0.0.0.0", () => {
   console.log(`🚀 Secure agent running on port ${port}`);
 });
 
