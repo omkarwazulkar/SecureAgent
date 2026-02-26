@@ -1,0 +1,38 @@
+name: Deploy Secure Agent
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ACR_NAME: secureagentregistry001
+  RESOURCE_GROUP: AzureRG
+  CONTAINER_APP_NAME: secure-agent-app
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build & Push Image To ACR
+        run: |
+          az acr build \
+            --registry $ACR_NAME \
+            --image secureagent:${{ github.sha }} \
+            .
+
+      - name: Deploy To Container Apps
+        run: |
+          az containerapp update \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --image $ACR_NAME.azurecr.io/secureagent:${{ github.sha }}
