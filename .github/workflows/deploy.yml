@@ -6,12 +6,12 @@ on:
       - main
 
 env:
-  ACR_NAME: secureagentregistry001
+  ACR_NAME: SecureAgent
   RESOURCE_GROUP: AzureRG
   CONTAINER_APP_NAME: secure-agent-app
 
 jobs:
-  build-and-deploy:
+  Build-Deploy:
     runs-on: ubuntu-latest
 
     steps:
