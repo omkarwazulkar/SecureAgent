@@ -1,9 +1,7 @@
 name: Deploy Secure Agent
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 env:
   ACR_NAME: secureagent
